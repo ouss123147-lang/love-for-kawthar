@@ -2,80 +2,197 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>إلى حبيبتي كوثر ❤️</title>
+  <title>كوثر ❤️ حياتي</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap');
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(45deg, #ff758c, #ff7eb3, #ffdde1);
-      background-size: 400% 400%;
-      animation: gradient 10s ease infinite;
-      font-family: "Tahoma", sans-serif;
-      color: white;
-      text-align: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: 'Reem Kufi', sans-serif;
       overflow: hidden;
+      background: linear-gradient(-45deg, #ff758c, #ff7eb3, #ff4d6d, #ffc3a0);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
     }
-
-    @keyframes gradient {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
+    @keyframes gradientBG {
+      0% {background-position:0% 50%;}
+      50% {background-position:100% 50%;}
+      100% {background-position:0% 50%;}
     }
-
     h1 {
       font-size: 3em;
-      margin-top: 100px;
-      text-shadow: 0 0 20px #ff0055, 0 0 40px #ff3399;
-      animation: pulse 2s infinite;
+      color: white;
+      text-shadow: 0 0 25px rgba(255,255,255,0.9);
+      animation: glow 2s infinite alternate;
     }
-
-    p {
-      font-size: 1.5em;
-      margin-top: 20px;
-      animation: fadein 3s ease-in-out;
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff, 0 0 20px #ff4d6d; }
+      to { text-shadow: 0 0 30px #fff, 0 0 50px #ff4d6d; }
     }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
+    .typewriter {
+      font-size: 1.6em;
+      color: #fff;
+      border-right: 2px solid white;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 7s steps(40, end) forwards, blink .7s infinite;
     }
-
-    @keyframes fadein {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
     }
-
-    /* قلوب تطير */
-    .heart {
+    @keyframes blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: white; }
+    }
+    .heart, .star {
       position: absolute;
-      color: red;
-      font-size: 30px;
+      color: rgba(255,255,255,0.9);
+      font-size: 20px;
       animation: float 6s linear infinite;
     }
-
     @keyframes float {
-      from { transform: translateY(100vh) scale(0.5); opacity: 1; }
-      to { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+    }
+    .music, .secret {
+      margin-top: 25px;
+      background: white;
+      color: #ff4d6d;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: 0.3s;
+      z-index: 10;
+    }
+    .music:hover, .secret:hover {
+      background: #ffe0eb;
+    }
+    .rose {
+      font-size: 4em;
+      margin-top: 20px;
+      animation: bloom 4s ease-in-out infinite alternate;
+    }
+    @keyframes bloom {
+      from { transform: scale(0.8) rotate(0deg); }
+      to { transform: scale(1.1) rotate(10deg); }
+    }
+    .hidden-message {
+      display: none;
+      font-size: 1.5em;
+      color: #fff;
+      margin-top: 20px;
+      text-align: center;
+      animation: fadeIn 2s forwards;
+    }
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <h1>إلى حبيبتي كوثر ❤️</h1>
-  <p>أنتِ نجمتي المضيئة ✨ وحلمي الجميل 🌹 وسبب سعادتي 💖</p>
+  <canvas id="stars"></canvas>
 
-  <!-- قلوب تطير -->
+  <h1>كوثر 🌹 أميرتي</h1>
+  <div class="typewriter">أنتِ قدري، وحلمي، وسبب ابتسامتي كل يوم 💕</div>
+  <div class="rose">🌹</div>
+
+  <button class="music" onclick="toggleMusic()">🎶 موسيقى رومانسية</button>
+  <button class="secret" onclick="showMessage()">🎁 اضغطي هنا</button>
+  
+  <div class="hidden-message" id="secret-msg">
+    مفاجأتي لكِ يا كوثر 💖… أحبك حباً لا ينتهي، وأعدك أن أبقى معكِ ما حييتِ ✨
+  </div>
+
+  <audio id="bg-music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.innerText = "❤️";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
+    // قلوب ونجوم
+    function createParticle() {
+      const el = document.createElement("div");
+      el.classList.add(Math.random() > 0.5 ? "heart" : "star");
+      el.innerHTML = Math.random() > 0.5 ? "❤️" : "✨";
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.fontSize = Math.random() * 20 + 15 + "px";
+      el.style.animationDuration = (Math.random() * 3 + 3) + "s";
+      document.body.appendChild(el);
+      setTimeout(() => { el.remove(); }, 6000);
     }
-    setInterval(createHeart, 500);
+    setInterval(createParticle, 500);
+
+    // موسيقى
+    function toggleMusic() {
+      const music = document.getElementById("bg-music");
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+    }
+
+    // رسالة سرية
+    function showMessage() {
+      document.getElementById("secret-msg").style.display = "block";
+    }
+
+    // رسم النجوم وتشكيل اسم كوثر
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const stars = [];
+    for (let i = 0; i < 150; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5,
+        opacity: Math.random()
+      });
+    }
+
+    function drawStars() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI*2);
+        ctx.fillStyle = "rgba(255,255,255,"+star.opacity+")";
+        ctx.fill();
+      });
+
+      ctx.font = "bold 60px Reem Kufi";
+      ctx.fillStyle = "rgba(255,255,255,0.8)";
+      ctx.textAlign = "center";
+      ctx.fillText("كوثر", canvas.width/2, 100);
+    }
+
+    function animate() {
+      drawStars();
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
   </script>
 </body>
-</html>
+    </html>
